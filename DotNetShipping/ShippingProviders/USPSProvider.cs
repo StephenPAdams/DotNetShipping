@@ -46,6 +46,8 @@ namespace DotNetShipping.ShippingProviders
             {"First-Class Mail Letter","First-Class Mail Letter"},
             {"First-Class Mail Parcel","First-Class Mail Parcel"},
             {"First-Class Mail Postcards","First-Class Mail Postcards"},
+            {"First-Class Mail Stamped Letter","First-Class Mail Stamped Letter"},
+            {"First-Class Mail Metered Letter","First-Class Mail Metered Letter"},
             {"Priority Mail {0}","Priority Mail {0}"},
             {"Priority Mail Express {0} Hold For Pickup","Priority Mail Express {0} Hold For Pickup"},
             {"Priority Mail Express {0}","Priority Mail Express {0}"},
@@ -92,7 +94,9 @@ namespace DotNetShipping.ShippingProviders
             {"First-Class Package Service","First-Class Package Service"},
             {"Priority Mail Express {0} Padded Flat Rate Envelope","Priority Mail Express {0} Padded Flat Rate Envelope"},
             {"Priority Mail Express {0} Padded Flat Rate Envelope Hold For Pickup","Priority Mail Express {0} Padded Flat Rate Envelope Hold For Pickup"},
-            {"Priority Mail Express {0} Sunday/Holiday Delivery Padded Flat Rate Envelope","Priority Mail Express {0} Sunday/Holiday Delivery Padded Flat Rate Envelope"}
+            {"Priority Mail Express {0} Sunday/Holiday Delivery Padded Flat Rate Envelope","Priority Mail Express {0} Sunday/Holiday Delivery Padded Flat Rate Envelope"},
+            {"First-Class Package Service - Retail","First-Class Package Service - Retail"},
+            {"USPS Retail Ground", "USPS Retail Ground"}
         };
         
         public USPSProvider()

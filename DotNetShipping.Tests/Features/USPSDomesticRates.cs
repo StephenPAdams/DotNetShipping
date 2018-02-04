@@ -191,5 +191,36 @@ namespace DotNetShipping.Tests.Features
             Assert.NotNull(response.InfoMessages);
             Assert.True(response.InfoMessages.Count > 0);
         }
+
+        [Fact]
+        public void USPS_Domestic_Will_Return_New_Letter_Rates_For_Smaller_Packages()
+        {
+            var rateManager = new RateManager();
+            rateManager.AddProvider(new USPSProvider(USPSUserId, "ALL", String.Empty, true));
+
+            var package1 = new Package(9m, 7m, 1m, 0.1875m, 0);
+
+            var origin = new Address("", "", "21401", "US");
+            var destination = new Address("", "", "54937", "US");
+
+            var response = rateManager.GetRates(origin, destination, new List<Package>() { package1 });
+            var meteredLetterFound = false;
+            var stampedLetterFound = false;
+
+            Assert.NotNull(response.Rates);
+            Assert.True(response.Rates.Count > 0);
+
+            foreach (var rate in response.Rates)
+            {
+                if (rate.Name.Contains("First-Class Mail Stamped Letter"))
+                    stampedLetterFound = true;
+
+                if (rate.Name.Contains("First-Class Mail Metered Letter"))
+                    meteredLetterFound = true;
+            }
+
+            Assert.True(meteredLetterFound);
+            Assert.True(stampedLetterFound);
+        }
     }
 }
