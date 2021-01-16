@@ -21,7 +21,7 @@ namespace DotNetShipping.ShippingProviders
         public FedExProvider()
         {
             var appSettings = ConfigurationManager.AppSettings;
-            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true);
+            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true, false);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace DotNetShipping.ShippingProviders
         /// <param name="meterNumber"></param>
         public FedExProvider(string key, string password, string accountNumber, string meterNumber)
         {
-            Init(key, password, accountNumber, meterNumber, true);
+            Init(key, password, accountNumber, meterNumber, true, false);
         }
 
         /// <summary>
@@ -42,12 +42,13 @@ namespace DotNetShipping.ShippingProviders
         /// <param name="accountNumber"></param>
         /// <param name="meterNumber"></param>
         /// <param name="useProduction"></param>
-        public FedExProvider(string key, string password, string accountNumber, string meterNumber, bool useProduction)
+        /// <param name="retrieveCheapestRatePerProviderCode"></param>
+        public FedExProvider(string key, string password, string accountNumber, string meterNumber, bool useProduction, bool retrieveCheapestRatePerProviderCode)
         {
-            Init(key, password, accountNumber, meterNumber, useProduction);
+            Init(key, password, accountNumber, meterNumber, useProduction, retrieveCheapestRatePerProviderCode);
         }
 
-        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction)
+        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction, bool retrieveCheapestRatePerProviderCode)
         {
             Name = "FedEx";
             _key = key;
@@ -55,6 +56,7 @@ namespace DotNetShipping.ShippingProviders
             _accountNumber = accountNumber;
             _meterNumber = meterNumber;
             _useProduction = useProduction;
+            _retrieveCheapestRatePerProviderCode = retrieveCheapestRatePerProviderCode;
 
             SetServiceCodes();
         }

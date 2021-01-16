@@ -25,7 +25,7 @@ namespace DotNetShipping.ShippingProviders
         public FedExSmartPostProvider()
         {
             var appSettings = ConfigurationManager.AppSettings;
-            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true, appSettings["FedExHubId"]);
+            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true, appSettings["FedExHubId"], false);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace DotNetShipping.ShippingProviders
         /// <param name="hubId">If specified, the FedEx Rate API will only return SmartPost service type rates. Leave empty to get all service types.</param>
         public FedExSmartPostProvider(string key, string password, string accountNumber, string meterNumber, string hubId)
         {
-            Init(key, password, accountNumber, meterNumber, true, hubId);
+            Init(key, password, accountNumber, meterNumber, true, hubId, false);
         }
 
         /// <summary>
@@ -48,12 +48,13 @@ namespace DotNetShipping.ShippingProviders
         /// <param name="meterNumber"></param>
         /// <param name="hubId">If specified, the FedEx Rate API will only return SmartPost service type rates. Leave empty to get all service types.</param>
         /// <param name="useProduction"></param>
-        public FedExSmartPostProvider(string key, string password, string accountNumber, string meterNumber, string hubId, bool useProduction)
+        /// <param name="retrieveCheapestRatePerProviderCode"></param>
+        public FedExSmartPostProvider(string key, string password, string accountNumber, string meterNumber, string hubId, bool useProduction, bool retrieveCheapestRatePerProviderCode)
         {
-            Init(key, password, accountNumber, meterNumber, useProduction, hubId);
+            Init(key, password, accountNumber, meterNumber, useProduction, hubId, retrieveCheapestRatePerProviderCode);
         }
 
-        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction, string hubId)
+        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction, string hubId, bool retrieveCheapestRatePerProviderCode)
         {
             Name = "FedExSmartPost";
 
@@ -66,6 +67,7 @@ namespace DotNetShipping.ShippingProviders
             _meterNumber = meterNumber;
             _useProduction = useProduction;
             _hubId = hubId;
+            _retrieveCheapestRatePerProviderCode = retrieveCheapestRatePerProviderCode;
 
             SetServiceCodes();
         }

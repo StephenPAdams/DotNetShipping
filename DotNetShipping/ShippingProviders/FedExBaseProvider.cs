@@ -20,6 +20,11 @@ namespace DotNetShipping.ShippingProviders
         protected Dictionary<string, string> _serviceCodes;
 
         /// <summary>
+        /// If true, will pull in the cheapest rate returned for the provider code. Default is to retrieve the highest rate.
+        /// </summary>
+        protected bool _retrieveCheapestRatePerProviderCode;
+
+        /// <summary>
         /// FedEx allows insured values for items being shipped except when utilizing SmartPost. This setting will this value to be overwritten.
         /// </summary>
         protected bool _allowInsuredValues = true;
@@ -30,7 +35,7 @@ namespace DotNetShipping.ShippingProviders
         protected FedExBaseProvider()
         {
             var appSettings = ConfigurationManager.AppSettings;
-            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true);
+            Init(appSettings["FedExKey"], appSettings["FedExPassword"], appSettings["FedExAccountNumber"], appSettings["FedExMeterNumber"], true, false);
         }
 
         /// <summary>
@@ -41,10 +46,10 @@ namespace DotNetShipping.ShippingProviders
         /// <param name="meterNumber"></param>
         protected FedExBaseProvider(string key, string password, string accountNumber, string meterNumber)
         {
-            Init(key, password, accountNumber, meterNumber, true);
+            Init(key, password, accountNumber, meterNumber, true, false);
         }
 
-        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction)
+        private void Init(string key, string password, string accountNumber, string meterNumber, bool useProduction, bool retrieveCheapestRatePerProviderCode)
         {
             Name = "FedEx";
 
@@ -53,6 +58,7 @@ namespace DotNetShipping.ShippingProviders
             _accountNumber = accountNumber;
             _meterNumber = meterNumber;
             _useProduction = useProduction;
+            _retrieveCheapestRatePerProviderCode = retrieveCheapestRatePerProviderCode;
         }
 
 		/// <summary>
@@ -144,7 +150,9 @@ namespace DotNetShipping.ShippingProviders
         {
             foreach (var rateReplyDetail in reply.RateReplyDetails)
             {
-                var netCharge = rateReplyDetail.RatedShipmentDetails.Max(x => x.ShipmentRateDetail.TotalNetCharge.Amount);
+                var netCharge = (!_retrieveCheapestRatePerProviderCode)
+                    ? rateReplyDetail.RatedShipmentDetails.Max(x => x.ShipmentRateDetail.TotalNetCharge.Amount)
+                    : rateReplyDetail.RatedShipmentDetails.Min(x => x.ShipmentRateDetail.TotalNetCharge.Amount);
 
                 var key = rateReplyDetail.ServiceType.ToString();
                 var deliveryDate = rateReplyDetail.DeliveryTimestampSpecified ? rateReplyDetail.DeliveryTimestamp : DateTime.Now.AddDays(30);

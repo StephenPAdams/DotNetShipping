@@ -20,9 +20,10 @@ namespace DotNetShipping.Tests.Features
             var fedexAccountNumber = appSettings["FedExAccountNumber"];
             var fedexMeterNumber = appSettings["FedExMeterNumber"];
             var fedexUseProduction = Convert.ToBoolean(appSettings["FedExUseProduction"]);
+            var fedExRetrieveCheapestRates = Convert.ToBoolean(appSettings["FedExRetrieveCheapestRates"]);
 
             _rateManager = new RateManager();
-            _rateManager.AddProvider(new FedExProvider(fedexKey, fedexPassword, fedexAccountNumber, fedexMeterNumber, fedexUseProduction));
+            _rateManager.AddProvider(new FedExProvider(fedexKey, fedexPassword, fedexAccountNumber, fedexMeterNumber, fedexUseProduction, fedExRetrieveCheapestRates));
         }
 
         public void Dispose()
@@ -39,6 +40,8 @@ namespace DotNetShipping.Tests.Features
             var from = new Address("Annapolis", "MD", "21401", "US");
             var to = new Address("Fitchburg", "WI", "53711", "US");
             var package = new Package(7, 7, 7, 6, 0);
+
+            to.IsResidential = true;
 
             var r = _rateManager.GetRates(from, to, package);
             var fedExRates = r.Rates.ToList();

@@ -24,9 +24,10 @@ namespace DotNetShipping.Tests.Features
             var fedexMeterNumber = appSettings["FedExMeterNumber"];
             var fedexHubId = appSettings["FedExHubId"];
             var fedexUseProduction = Convert.ToBoolean(appSettings["FedExUseProduction"]);
+            var fedExRetrieveCheapestRates = Convert.ToBoolean(appSettings["FedExRetrieveCheapestRates"]);
 
             _rateManager = new RateManager();
-            _rateManager.AddProvider(new FedExSmartPostProvider(fedexKey, fedexPassword, fedexAccountNumber, fedexMeterNumber, fedexHubId, fedexUseProduction));
+            _rateManager.AddProvider(new FedExSmartPostProvider(fedexKey, fedexPassword, fedexAccountNumber, fedexMeterNumber, fedexHubId, fedexUseProduction, fedExRetrieveCheapestRates));
         }
 
         public void Dispose()
